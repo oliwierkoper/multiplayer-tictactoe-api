@@ -9,6 +9,25 @@ app=FastAPI()
 class Move(BaseModel):
     position: int
 
+def check_winner(board):
+    if board[0]==board[1]==board[2] != "":
+        return board[0]
+    if board[3]==board[4]==board[5] != "":
+        return board[3]
+    if board[6]==board[7]==board[8] != "":
+        return board[6]
+    if board[0]==board[3]==board[6] != "":
+        return board[0]
+    if board[1]==board[4]==board[7] != "":
+        return board[1]
+    if board[2]==board[5]==board[8] != "":
+        return board[2]
+    if board[0]==board[4]==board[8] != "":
+        return board[0]
+    if board[2]==board[4]==board[6] != "":
+        return board[2]
+    return None
+
 def load_data():
     try:
         with open(FILE_NAME,"r") as file:
@@ -61,6 +80,12 @@ def move(id: int, move: Move):
                     "error": "wrong move"
                 }
             i["board"][move.position] = i["current_player"]
+            if check_winner(i["board"]) != None:
+                i["winner"]=check_winner(i["board"])
+                i["is_finished"]=True
+                with open(FILE_NAME,"w") as file:
+                    json.dump(games,file)
+                return i
             if i["current_player"] == "X":
                 i["current_player"] = "O"
             else:
@@ -71,4 +96,3 @@ def move(id: int, move: Move):
     return{
         "error": "game not found"
     }
-

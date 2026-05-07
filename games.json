@@ -1,1 +1,1 @@
-[]
+[{"id": 1, "board": ["X", "X", "X", "", "O", "O", "", "", ""], "current_player": "X", "winner": "X", "is_finished": true}]
