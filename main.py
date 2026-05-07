@@ -86,6 +86,12 @@ def move(id: int, move: Move):
                 with open(FILE_NAME,"w") as file:
                     json.dump(games,file)
                 return i
+            if i["board"].count("")==0:
+                i["is_finished"]=True
+                i["winner"]="draw"
+                with open(FILE_NAME,"w") as file:
+                    json.dump(games,file)
+                return i
             if i["current_player"] == "X":
                 i["current_player"] = "O"
             else:
