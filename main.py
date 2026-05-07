@@ -39,3 +39,36 @@ def game():
     }
     save_data(new_game)
     return new_game
+@app.post("/games/{id}/move")
+def move(id: int, move: Move):
+    games = load_data()
+    if not games:
+        return{
+            "error": "no games found"
+        }
+    for i in games:
+        if i["id"] == id:
+            if i["is_finished"]:
+                return{
+                    "error": "game is already finished"
+                }
+            if move.position not in range(0,9):
+                return{
+                    "error": "wrong move"
+                }
+            if i["board"][move.position] != "":
+                return{
+                    "error": "wrong move"
+                }
+            i["board"][move.position] = i["current_player"]
+            if i["current_player"] == "X":
+                i["current_player"] = "O"
+            else:
+                i["current_player"] = "X"
+            with open(FILE_NAME,"w") as file:
+                json.dump(games,file)
+            return i 
+    return{
+        "error": "game not found"
+    }
+
